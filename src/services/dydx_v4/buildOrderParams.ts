@@ -1,4 +1,4 @@
-import { AlertObject, dydxV4OrderParams } from '../../types';
+import { AlertObject, dydxV4OrderParams, dydxV4PositionSide } from '../../types';
 import 'dotenv/config';
 import { getStrategiesDB } from '../../helper';
 import { OrderSide } from '@dydxprotocol/v4-client-js';
@@ -9,6 +9,15 @@ export const dydxV4BuildOrderParams = async (alertMessage: AlertObject) => {
 
 	const orderSide =
 		alertMessage.order == 'buy' ? OrderSide.BUY : OrderSide.SELL;
+
+	let positionSide = "";
+	if (alertMessage.position == 'long') {
+		positionSide = dydxV4PositionSide.LONG
+	} else if (alertMessage.position == 'short') {
+		positionSide = dydxV4PositionSide.SHORT
+	} else {
+		positionSide = dydxV4PositionSide.FLAT
+	}
 
 	const latestPrice = alertMessage.price;
 	console.log('latestPrice', latestPrice);
@@ -35,6 +44,7 @@ export const dydxV4BuildOrderParams = async (alertMessage: AlertObject) => {
 	const orderParams: dydxV4OrderParams = {
 		market,
 		side: orderSide,
+		position: positionSide as dydxV4PositionSide,
 		size: Number(orderSize),
 		price: Number(alertMessage.price)
 	};

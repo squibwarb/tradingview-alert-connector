@@ -35,9 +35,16 @@ export type dydxOrderParams = {
 	expiration: string;
 };
 
+export const enum dydxV4PositionSide {
+    LONG = 'long',
+    SHORT = 'short',
+    FLAT = 'flat'
+}
+
 export type dydxV4OrderParams = {
 	market: string;
 	side: v4OrderSide;
+	position: dydxV4PositionSide;
 	size: number;
 	price: number;
 };
